@@ -1,0 +1,28 @@
+<%- include("./partials/header") %>
+    <%- include("./partials/navbar") %>
+        <h1 class="display-5" style="text-align: center;">Edit Product</h1>
+        <div class="container" style="width: 70vw; margin: 40px auto;">
+            <form action="/products/<%=product._id%>?_method=PATCH" method="POST">
+                <div class="mb-3">
+                    <input type="text" class="form-control" name="name" placeholder="Product Name"
+                        value="<%=product.name%> ">
+                </div>
+                <div class="mb-3">
+                    <input type="text" class="form-control" name="img" placeholder="Image src"
+                        value="<%=product.img%> ">
+                </div>
+                <div class="mb-3">
+                    <input type="number" class="form-control" name="price" placeholder="Price in $"
+                        value=<%=product.price%>>
+                </div>
+                <div class="mb-3">
+                    <textarea class="form-control" name="desc" cols="10" rows="5"><%=product.desc%></textarea>
+                </div>
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-success">Save</button>
+                </div>
+
+            </form>
+        </div>
+
+        <%- include("./partials/footer") %>

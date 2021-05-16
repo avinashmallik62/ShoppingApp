@@ -1,0 +1,37 @@
+<%- include("./partials/header") %>
+    <%- include("./partials/navbar") %>
+        <div class="row" style="margin: 40px auto;">
+            <div class="col-lg-5">
+                <div class="card text-center m-3" style="width: 400px">
+                    <img src="<%=product.img%>" class="card-img-top" width="250px" height="200px">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <%=product.name%>
+                        </h5>
+                        <p class="card-text">
+                            <%=product.desc%>
+                        </p>
+                        <a href="/products" class="btn btn-primary">Go back</a>
+                        <a href="/products/<%=product._id%>/edit " class="btn btn-warning">Edit</a>
+                        <form action="/products/<%=product._id%>?_method=DELETE" method="POST" class="mt-2">
+                            <button class="btn btn-danger">Delete</button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <h1 class="display-5">
+                    Leave a Review ❤
+                    <div style="margin: 20px auto;">
+                        <textarea class="form-control" name="desc" cols="10" rows="10"></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+
+                </h1>
+            </div>
+        </div>
+        <%- include("./partials/footer") %>
