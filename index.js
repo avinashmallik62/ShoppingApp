@@ -1,60 +1,69 @@
 const express = require("express");
 const app = express();
-const mongoose = require("mongoose");
-const seedDB = require("./seed");
-const Product = require("./models/product");
 const path = require("path");
+const mongoose = require("mongoose");
+
 const methodOverride = require("method-override");
-mongoose
-  .connect("mongodb://localhost:27017/shoppingApp", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false,
-  })
-  .then(() => {
-    console.log("DB Connected");
-  })
-  .catch((err) => {
-    console.log("DB connection failed");
-    console.log(err);
-  });
-// seedDB();
+const seedDB = require("./seed");
+const session = require("express-session");
+const flash = require("connect-flash");
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+const User = require("./models/user");
+
+const productRoutes = require("./routes/product");
+const authRoutes = require("./routes/auth");
+const cartRoutes = require("./routes/cart");
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
+app.use(express.static(path.join(__dirname, "/public")));
 
-app.get("/", (req, res) => {
-  res.send("Hello World");
+const sessionConfig = {
+  secret: "mysecret",
+  resave: false,
+  saveUninitialized: true,
+};
+app.use(session(sessionConfig));
+app.use(flash());
+
+//initialising the passport and sessions to store user info
+app.use(passport.initialize());
+app.use(passport.session());
+
+//configuring the passport to use local strategy
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+mongoose
+  .connect("mongodb://localhost:27017/shopApp", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log("DB Connected");
+  })
+  .catch((err) => {
+    console.log("Connection Failed");
+    console.log(err);
+  });
+
+
+//things written inside res.locals is available on the templates
+app.use(function (req, res, next) {
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
+  res.locals.currentUser = req.user;
+  next();
 });
-app.get("/products", async (req, res) => {
-  const products = await Product.find({});
-  res.render("index", { products });
-});
-app.get("/products/new", async (req, res) => {
-  res.render("new");
-});
-app.post("/products", async (req, res) => {
-  await Product.create(req.body);
-  res.redirect("/products");
-});
-app.get("/products/:id", async (req, res) => {
-  const product = await Product.findById(req.params.id);
-  res.render("show", { product });
-});
-app.get("/products/:id/edit", async (req, res) => {
-  const product = await Product.findById(req.params.id);
-  res.render("edit", { product });
-});
-app.patch("/products/:id", async (req, res) => {
-  await Product.findByIdAndUpdate(req.params.id, req.body);
-  res.redirect(`/products/${req.params.id}`);
-});
-app.delete("/products/:id", async (req, res) => {
-  await Product.findByIdAndDelete(req.params.id);
-  res.redirect(`/products`);
-});
+
+app.use(productRoutes);
+app.use(authRoutes);
+app.use(cartRoutes);
+// seedDB();
 app.listen(3000, () => {
   console.log("Server started at port 3000");
 });
