@@ -1,0 +1,41 @@
+<%-include("../partials/header") %>
+    
+    <div class="container m-5">
+        <div class="col-lg-6 m-auto">
+            <form action="/register" class="needs-validation" method="post" novalidate>
+                <h1 style="text-align: center;">
+                    Sign Up
+                </h1>
+                <div class="container">
+                    <%-include("../partials/flash")  %> 
+                </div>
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control" name="username" placeholder="username" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="text" class="form-control" name="email" placeholder="Email" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="name" class="form-label">Password</label>
+                    <input type="password" class="form-control" name="password" placeholder="password" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-success">Sign Up</button>
+            </form>
+        </div>
+
+    </div>
+
+
+    <%-include("../partials/footer") %>

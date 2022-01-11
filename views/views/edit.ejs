@@ -1,0 +1,29 @@
+<%-include("./partials/header") %>
+    <h1 style="text-align: center;">
+        Add a new Product
+    </h1>
+    <div class="container m-5">
+        <div class="col-lg-6">
+            <form class="needs-validation" action="/products/<%=product._id%>?_method=PATCH" method="POST" novalidate>
+                
+                <div class="mb-3">
+                    <label for="name" class="form-label">Image</label>
+                    <input type="text" class="form-control" name="product[img]" value="<%= product.img%>" required>
+                </div>
+                <div class="mb-3">
+                    <label for="name" class="form-label">Price</label>
+                    <input type="text" class="form-control" name="product[price]" value="<%= product.price%>" required>
+                </div>
+                <div class="mb-3">
+                    <label for="name" class="form-label">Description</label>
+                    <textarea name="product[desc]" class="form-control" cols="30" rows="5" required><%= product.desc%></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Update</button>
+            </form>
+        </div>
+    </div>
+
+
+
+
+    <%-include("./partials/footer") %>
